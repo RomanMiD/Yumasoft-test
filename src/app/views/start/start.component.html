@@ -1,0 +1,6 @@
+<div class="form-group mt-3">
+  <textarea [formControl]="control" class="form-control col-5 m-auto"></textarea>
+  <button class="btn btn-primary col-2 offset-5 mt-2" routerLink="/table" [disabled]="control.invalid"
+          (click)="save(control.value)">Продолжить
+  </button>
+</div>
