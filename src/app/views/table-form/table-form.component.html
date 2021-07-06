@@ -1,30 +1,42 @@
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th *ngFor="let label of labels" scope="col">{{label}}</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let item of data; let i= index">
-    <td *ngFor="let label of labels">
-      <ng-container *ngIf="currentEditableElement!=item">{{item[label]}}</ng-container>
-      <ng-container *ngIf="currentEditableElement===item"><input class="" [(ngModel)]="item[label]" type="text"/>
-      </ng-container>
-    </td>
-    <td>
-      <div class="btn-group">
-        <button *ngIf="currentEditableElement===item" (click)="currentEditableElement=null" type="button"
-                class="btn btn-success">Confirm
-        </button>
-        <button *ngIf="currentEditableElement!==item" class="btn btn-primary" (click)="onClickEdit(item)">edit</button>
-        <button class="btn btn-danger" (click)="onClickDelete(i)">del</button>
-      </div>
-    </td>
+<div class="table col-10 offset-1">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th *ngFor="let label of labels" class="col-12" scope="col">{{label}}</th>
+      <th class="col-2" scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of data; let i= index" (dblclick)="onDoubleClickEdit(item)">
+      <td *ngFor="let label of labels" class="col-12">
+        <ng-container *ngIf="currentEditableElement!=item"><p>{{item[label]}}</p></ng-container>
+        <ng-container *ngIf="currentEditableElement===item"><input class="" [(ngModel)]="item[label]" type="text"/>
+        </ng-container>
+      </td>
+      <th scope="row">
+        <div class="btn-group">
 
-  </tr>
+          <button
+            *ngIf="currentEditableElement!==item"
+            class="btn btn-primary"
+            (click)="onClickEdit(item)">edit
+          </button>
+          <button
+            *ngIf="currentEditableElement===item"
+            (click)="onClickConfirm()"
+            class="btn btn-success">done
+          </button>
+          <button class="btn btn-danger" (click)="onClickDelete(i)">del</button>
+        </div>
+      </th>
 
-  </tbody>
-</table>
-<button class="btn btn-primary col-2 offset-5" [routerLink]="'/upload'">Загрузить</button>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="btn-group-lg">
+  <button class="btn btn-primary col-2 offset-5 mb-3" (click)="onClickAdd()">Добавить</button>
+  <button class="btn btn-primary col-2 offset-5" (click)="onSubmit()">Предпросмотр</button>
+</div>
+
 

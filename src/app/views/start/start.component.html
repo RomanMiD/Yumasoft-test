@@ -1,6 +1,14 @@
-<div class="form-group mt-3">
-  <textarea [formControl]="control" class="form-control col-5 m-auto"></textarea>
-  <button class="btn btn-primary col-2 offset-5 mt-2" routerLink="/table" [disabled]="control.invalid"
-          (click)="save(control.value)">Продолжить
-  </button>
-</div>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="form-group col-8 offset-2 mt-5">
+  <textarea formControlName="text" class="form-control"></textarea>
+  <input type="file"
+         class="form-control-file mt-4"
+         (change)="onFileChange($event)"
+         formControlName="filePath"
+         accept="application/json">
+  <div class="btn-group col-4 offset-4 mt-5">
+    <button class="btn btn-primary"
+            [disabled]="formGroup.invalid"
+            type="submit">Продолжить
+    </button>
+  </div>
+</form>

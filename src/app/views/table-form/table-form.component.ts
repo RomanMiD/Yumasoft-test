@@ -1,25 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { StateService } from "../../services/state.service";
 import { InputDataItem } from "../../common/interfaces/input-data-item.interface";
+import { Router } from "@angular/router";
 
 
 @Component({
   selector: 'app-table-form',
   templateUrl: './table-form.component.html',
-  styleUrls: ['./table-form.component.scss']
+  styleUrls: ['./table-form.component.scss'],
 })
 export class TableFormComponent implements OnInit {
-  data!: InputDataItem[] ;
+  data!: InputDataItem[];
   labels: string[] = [];
   currentEditableElement: InputDataItem | null = null;
 
-  constructor(private stateService: StateService) {
+  constructor(private stateService: StateService, private router: Router) {
+    this.onKeydownEscape();
+  }
 
+  setElementToEdit(element: InputDataItem | null): void {
+    this.currentEditableElement = element;
+  }
+
+
+  @HostListener('keydown.escape')
+  onKeydownEscape():void {
+    this.currentEditableElement = null;
+  }
+
+  onDoubleClickEdit(item: InputDataItem):void {
+    this.setElementToEdit(item);
   }
 
   ngOnInit(): void {
     this.data = this.stateService.getData();
-    console.log(this.data)
     this.labels = [...new Set(this.data
       .map((obj) => {
         return Object.keys(obj)
@@ -32,15 +46,28 @@ export class TableFormComponent implements OnInit {
   onClickDelete(i: number): void {
     this.data.splice(i, 1)
     this.currentEditableElement = null;
-    //array.splice(index, 1)
   }
 
-  onClickEdit(element: InputDataItem): void {
-    this.currentEditableElement = element;
+  onClickEdit(item: InputDataItem): void {
+    this.setElementToEdit(item);
+
+  }
+
+
+  onClickAdd() :void{
+    const newElement: InputDataItem = {};
+    this.data.push(newElement);
+    this.setElementToEdit(newElement)
+  }
+
+  onClickConfirm(): void {
+    this.setElementToEdit(null);
   }
 
   onSubmit(): void {
-    // this.stateService.formData = this.data
+    this.stateService.formData = this.data;
+    this.router.navigate(['/upload'])
   }
+
 
 }
